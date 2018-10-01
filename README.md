@@ -1,3 +1,6 @@
+# Alex's Fundamentals of Software Engineering Portfolio
+In this class I learned more about web development through HTML, PHP, SQL Databases, and its CRUD(Create, Read, Update, and Delete) functions.
+
 # Web Based Voting System (WBVS)
 The Web Based Voting System is a application that can be accessed a voting station computer on the web. This application will have the following features:
 
