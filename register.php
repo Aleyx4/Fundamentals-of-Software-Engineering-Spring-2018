@@ -1,5 +1,6 @@
 <?php
    include("config.php");
+   include("mail.php");
    $error = "";
    $success = "";
    
@@ -23,6 +24,12 @@
       $licensenum = mysqli_real_escape_string($db,$_POST['licensenum']);
       $nonopidnum = mysqli_real_escape_string($db,$_POST['nonopidnum']);
       $ssn = mysqli_real_escape_string($db,$_POST['ssn']);
+      $sq1 = mysqli_real_escape_string($db,$_POST['sq1']);
+      $sq2 = mysqli_real_escape_string($db,$_POST['sq2']);
+      $sq3 = mysqli_real_escape_string($db,$_POST['sq3']);
+      $a1 = sha1(mysqli_real_escape_string($db,$_POST['a1']));
+      $a2 = sha1(mysqli_real_escape_string($db,$_POST['a2']));
+      $a3 = sha1(mysqli_real_escape_string($db,$_POST['a3']));
       
       $sql = "SELECT username FROM accounts WHERE BINARY username = '$myusername'";
       $result = mysqli_query($db,$sql);
@@ -31,12 +38,16 @@
       $count = mysqli_num_rows($result);
       
       if($count == 0) {
-         if(strlen($mypassword) > 5) {
+         if(strlen($_POST['password']) > 5) {
+         	$mypassword = sha1($mypassword);
          	if((strlen($first) > 0)&&(strlen($middle) > 0)&&(strlen($last) > 0)&&(strlen($dob) > 0)&&(strlen($sex) > 0)&&(strlen($address) > 0)&&(strlen($city) > 0)&&(strlen($state) > 0)&&(strlen($county) > 0)&&((strlen($licensenum) == 9)||(strlen($nonopidnum) == 9)||(strlen($ssn) > 0)))
          	{
-            	$sql = "INSERT into accounts(username, password, accounttype, firstname, lastname, middlename, suffix, dob, sex, phonenum, email, streetaddress, city, state, zipcode, county, licensenum, nonopidnum, ssn) values ('$myusername', '$mypassword', 'voter', '$first', '$last', '$middle', '$mysuffix', '$newdob', '$sex', '$phone', '$email', '$address', '$city', '$state', '$zipcode', '$county', '$licensenum', '$nonopidnum', '$ssn')";
+            	$sql = "INSERT into accounts(username, password, accounttype, firstname, lastname, middlename, suffix, dob, sex, phonenum, email, streetaddress, city, state, zipcode, county, licensenum, nonopidnum, ssn, q1, q2, q3, a1, a2, a3) values ('$myusername', '$mypassword', 'voter', '$first', '$last', '$middle', '$mysuffix', '$newdob', '$sex', '$phone', '$email', '$address', '$city', '$state', '$zipcode', '$county', '$licensenum', '$nonopidnum', '$ssn', '$sq1', '$sq2', '$sq3', '$a1', '$a2', '$a3')";
             	mysqli_query($db,$sql);
+            	emailConfirmation($email);
             	$success = "Registration Completed";
+
+
             }
             else {
             	$error = "Information Is Missing";
@@ -56,6 +67,9 @@
 
 	<head>
 		<link rel="stylesheet" type="text/css" href="registration.css">
+    <meta charset="utf-8">
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <script src="bootstrap.min.js"></script>
 		<title>Registration Page</title>
 	</head>
    
@@ -78,7 +92,7 @@
 								<option value="Sr.">Sr.</option>
 								<option value="Jr.">Jr.</option>
 							</select><br/><br/>
-							<label>Date of Birth  </label><input type="date" name="dob"><br/><br/>
+							<label>Date of Birth  </label><input style=" height: 20px" type="date" name="dob"><br/><br/>
 							<label>Sex  </label><select name = "sex">
 								<option value=""> </option>
 								<option value="m">Male</option>
@@ -148,11 +162,17 @@
 							<br><br/>
 							<label>Last 4 Digits of Social Security Number  </label><input type = "number" name = "ssn" min = "1000"  max = "9999" class = "box"/><br/><br/>
 							<br><br/>
-		                </div>
+							<br><br/>
+							<label>Security Question 1</label><input type = "text" name = "sq1" class = "box" /><label>Answer 1</label><input type = "text" name = "a1" class = "box" /><br/><br/>
+							<br><br/>
+							<label>Security Question 2</label><input type = "text" name = "sq2" class = "box" /><label>Answer 2</label><input type = "text" name = "a2" class = "box" /><br/><br/>
+							<br><br/>
+							<label>Security Question 3</label><input type = "text" name = "sq3" class = "box" /><label>Answer 3</label><input type = "text" name = "a3" class = "box" /><br/><br/>
+		        </div>
 
 						<br>
 							<div style="text-align: center">
-								<input  type = "submit" value = "  Regsiter  " align="center"/>
+								<input  class="btn" type = "submit" value = "  Regsiter  " align="center"/>
 							</div>
 						<br/>
 
